@@ -1,0 +1,49 @@
+{
+  "name": "mg-model",
+  "version": "0.0.1",
+  "description": "Simple and lightweight angular model library",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "init": "npm install",
+    "install": "bower install",
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/megahertz/mg-model.git"
+  },
+  "keywords": [
+    "angular",
+    "model",
+    "collection",
+    "library",
+    "simple",
+    "lightweight",
+    "oop"
+  ],
+  "author": "Alexey Prokhorov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/megahertz/mg-model/issues"
+  },
+  "homepage": "https://github.com/megahertz/mg-model",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-jasmine-browser": "^0.2.3",
+    "gulp-jasmine-livereload-task": "^0.8.0",
+    "gulp-jscs": "^3.0.2",
+    "gulp-jshint": "^2.0.0",
+    "gulp-ng-annotate": "^1.1.0",
+    "gulp-task-listing": "^1.0.1",
+    "gulp-uglify": "^1.5.1",
+    "jshint": "^2.8.0",
+    "jshint-stylish": "^2.1.0",
+    "karma": "^0.13.16",
+    "karma-jasmine": "^0.3.6",
+    "karma-phantomjs-launcher": "^0.2.2",
+    "phantomjs": "^1.9.19"
+  }
+}

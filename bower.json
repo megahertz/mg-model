@@ -18,11 +18,8 @@
   "moduleType": [],
   "homepage": "https://github.com/megahertz/mg-model",
   "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
+    "*",
+    "!dist/*"
   ],
   "dependencies": {
     "angular": "~1.4.8"

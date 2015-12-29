@@ -43,7 +43,15 @@ gulp.task('test-browser', require('gulp-jasmine-livereload-task')({
     files: config.testsJs
 }));
 
-gulp.task('build', ['test'], function() {
+gulp.task('build-assets', function() {
+    return gulp.src([
+            './README.md',
+            './LICENSE'
+        ])
+        .pipe(gulp.dest('dist'));
+});
+
+gulp.task('build', ['test', 'build-assets'], function() {
     return gulp.src('src/*.js')
         .pipe(require('gulp-concat')('mgmodel.js'))
         .pipe(gulp.dest('dist'))

@@ -112,6 +112,8 @@
             }));
         };
 
+        BaseCollection.prototype.each = BaseCollection.prototype.forEach;
+
         BaseCollection.prototype.appendResource = function appendResource(resource) {
             var self = this;
             return resource.then(function(records) {
@@ -131,8 +133,24 @@
             });
             return new this.constructor(result);
         };
+
         BaseCollection.prototype.oneExp = function oneExp(expression, scope) {
             return this.filterExp(expression, scope)[0];
+        };
+
+        BaseCollection.prototype.byId = function byId(id) {
+            var result = this.filter(function(model) {
+               return model.getId() === id;
+            });
+            return result[0];
+        };
+
+        BaseCollection.prototype.toObject = function toObject() {
+            var obj = {};
+            this.each(function(model) {
+                obj[model.getId()] = model;
+            });
+            return obj;
         };
 
         /**

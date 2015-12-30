@@ -14,10 +14,28 @@
      * @return BaseModel
      * @ngInject
      */
-    function mgModel($q, $parse) {
+    function mgModel($q, $parse, $rootScope) {
         var Model = createBaseModel();
         Model.$collection = createBaseCollection(Model, $q, $parse);
+
+        Model.prototype.$on   = Model.$collection.prototype.$on   = $on;
+        Model.prototype.$emit = Model.$collection.prototype.$emit = $emit;
+
         return Model;
+
+        function $on(event, handler) {
+            /* jshint -W040 */
+            this.scope = this.scope || $rootScope.$new();
+            this.scope.$on(event, handler);
+            return this;
+        }
+
+        function $emit(event, data) {
+            /* jshint -W040 */
+            if (this.scope) {
+                this.scope.$emit(event, data);
+            }
+        }
     }
 
     /**
@@ -140,7 +158,7 @@
 
         BaseCollection.prototype.byId = function byId(id) {
             var result = this.filter(function(model) {
-               return model.getId() === id;
+                return model.getId() === id;
             });
             return result[0];
         };

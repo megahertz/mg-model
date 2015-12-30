@@ -1,15 +1,18 @@
 describe('extend method', function() {
 
     var mgModel;
+    var $rootScope;
 
 
     beforeEach(function() {
         module('mgmodel');
     });
 
-    beforeEach(inject(function(_mgModel_) {
+    beforeEach(inject(function(_mgModel_, _$rootScope_) {
         mgModel = _mgModel_;
+        $rootScope = _$rootScope_;
     }));
+
 
     describe('constructor', function() {
         it('should create models with the same logic', function() {
@@ -70,4 +73,25 @@ describe('extend method', function() {
         expect(child instanceof Parent).toBe(true);
         expect(parent instanceof Child).toBe(false);
     });
+
+    it('should create classes with on/emit', function() {
+        var Model = mgModel.extend({
+            name: 'simple',
+            setName: function(name) {
+                this.$emit('change-name', name);
+                this.name = name;
+            }
+        });
+        var changed;
+
+        var model = new Model();
+        model.$on('change-name', function(e, value) {
+            changed = value;
+        });
+        model.setName('test');
+        $rootScope.$digest();
+
+        expect(model.name).toBe('test');
+        expect(changed).toBe('test');
+    })
 });

@@ -1,7 +1,7 @@
 {
   "name": "mg-model",
   "description": "Simple and lightweight angular model library",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "main": "dist/mgmodel.js",
   "authors": [
     "Alexey Prokhorov"

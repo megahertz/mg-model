@@ -5,6 +5,7 @@
         .module('mgmodel', [])
         .factory('mgModel', mgModel);
 
+    mgModel.$inject = ['$q', '$parse', '$rootScope'];
     /**
      * @ngdoc service
      * @name mgModel
@@ -112,9 +113,11 @@
 
         BaseCollection.prototype = Object.create(Array.prototype);
 
+        BaseCollection.prototype.each = BaseCollection.prototype.forEach;
+
         BaseCollection.prototype.append = function append(data) {
             if (!data) {
-                return;
+                return this;
             }
             if (!(data instanceof Array)) {
                 throw 'Collection accepts only Array';
@@ -128,9 +131,9 @@
                 }
                 return record;
             }));
-        };
 
-        BaseCollection.prototype.each = BaseCollection.prototype.forEach;
+            return this;
+        };
 
         BaseCollection.prototype.appendResource = function appendResource(resource) {
             var self = this;

@@ -1,4 +1,7 @@
 var gulp = require('gulp');
+var argv = require('yargs').argv;
+
+var execSync = require('child_process').execSync;
 
 var config = {
     testsJs: [
@@ -57,6 +60,31 @@ gulp.task('build', ['test', 'build-assets'], function() {
         .pipe(gulp.dest('dist'))
         .pipe(require('gulp-concat')('mgmodel.min.js'))
         .pipe(require('gulp-ng-annotate')())
-        .pipe(require('gulp-uglify')())
+        .pipe(require('gulp-uglifyjs')({
+            outSourceMap: true
+        }))
         .pipe(gulp.dest('dist'));
 });
+
+gulp.task('bump', function(){
+    gulp.src(['./bower.json', './package.json'])
+        .pipe(require('gulp-bump')())
+        .pipe(gulp.dest('./'));
+});
+
+gulp.task('publish', ['build'], function() {
+    var version = 'v' + require('./package.json').version;
+    var comment = argv.m || 'Update version ' + version;
+    cmd('git add .');
+    cmd('git commit -m', comment);
+    cmd('git push');
+    cmd('bower register mg-model git://github.com/megahertz/mg-model.git');
+});
+
+function cmd(command, argument) {
+    if (argument) {
+        command += ' "' + argument.replace(/(["\s'$`\\])/g,'\\$1') + '"';
+    }
+    var result = execSync(command);
+    console.log(result);
+}

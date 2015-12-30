@@ -1,6 +1,6 @@
 {
   "name": "mg-model",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Simple and lightweight angular model library",
   "directories": {
     "test": "tests"
@@ -30,6 +30,7 @@
   "homepage": "https://github.com/megahertz/mg-model",
   "devDependencies": {
     "gulp": "^3.9.0",
+    "gulp-bump": "^1.0.0",
     "gulp-concat": "^2.6.0",
     "gulp-jasmine-browser": "^0.2.3",
     "gulp-jasmine-livereload-task": "^0.8.0",
@@ -37,12 +38,13 @@
     "gulp-jshint": "^2.0.0",
     "gulp-ng-annotate": "^1.1.0",
     "gulp-task-listing": "^1.0.1",
-    "gulp-uglify": "^1.5.1",
+    "gulp-uglifyjs": "^0.6.2",
     "jshint": "^2.8.0",
     "jshint-stylish": "^2.1.0",
     "karma": "^0.13.16",
     "karma-jasmine": "^0.3.6",
     "karma-phantomjs-launcher": "^0.2.2",
-    "phantomjs": "^1.9.19"
+    "phantomjs": "^1.9.19",
+    "yargs": "^3.31.0"
   }
 }

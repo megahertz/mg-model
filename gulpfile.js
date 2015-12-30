@@ -77,13 +77,13 @@ gulp.task('publish', ['build', 'bump'], function() {
     var comment = argv.m || 'Update version ' + version;
     cmd('git add .');
     cmd('git commit -m', comment);
-    cmd('git push --follow-tags');
+    cmd('git push origin ' + version);
     cmd('bower register mg-model git://github.com/megahertz/mg-model.git');
 });
 
 function cmd(command, argument) {
     if (argument) {
-        command += ' "' + argument.replace(/(["\s'$`\\])/g,'\\$1') + '"';
+        command += ' "' + argument.replace(/\"/g, '"\""')  + '"';
     }
     var result = execSync(command);
     console.log(result);

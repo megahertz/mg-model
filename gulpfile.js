@@ -66,7 +66,7 @@ gulp.task('build', ['test', 'build-assets'], function() {
         .pipe(gulp.dest('dist'));
 });
 
-gulp.task('bump', function(){
+gulp.task('bump', function() {
     gulp.src(['./bower.json', './package.json'])
         .pipe(require('gulp-bump')())
         .pipe(gulp.dest('./'));
@@ -79,13 +79,14 @@ gulp.task('publish', ['build', 'bump'], function() {
     cmd('git add .');
     cmd('git commit -m', comment);
     cmd('git push origin ' + version);
-    cmd('npm publish');
+    //cmd('npm publish');
 });
 
 function cmd(command, argument) {
     if (argument) {
         command += ' "' + argument.replace(/\"/g, '"\""')  + '"';
     }
+    console.log('Executing ' + command);
     var result = execSync(command).toString('utf8');
     console.log(result);
 }

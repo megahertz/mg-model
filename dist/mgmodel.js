@@ -89,20 +89,37 @@
          * @constructor
          */
         function BaseCollection(data) {
+            this.append(data);
+        }
+
+        BaseCollection.prototype = Object.create(Array.prototype);
+
+        BaseCollection.prototype.append = function append(data) {
             if (!data) {
                 return;
             }
             if (!(data instanceof Array)) {
                 throw 'Collection accepts only Array';
             }
+
             var Model = this.constructor.$model || BaseModel;
 
             this.push.apply(this, data.map(function(record) {
-                return new Model(record);
+                if (!(record instanceof Model)) {
+                    record = new Model(record);
+                }
+                return record;
             }));
-        }
+        };
 
-        BaseCollection.prototype = Object.create(Array.prototype);
+        BaseCollection.prototype.appendResource = function appendResource(resource) {
+            var self = this;
+            return resource.then(function(records) {
+                self.append(records);
+                return self;
+            });
+        };
+
         BaseCollection.prototype.filterExp = function filterExp(expression, scope) {
             var exp = $parse(expression);
             var result = this.filter(function(model) {
@@ -118,13 +135,23 @@
             return this.filterExp(expression, scope)[0];
         };
 
-        BaseCollection.load = function load(resource) {
-            var Self = this;
-            var promise = resource.then ? resource : $q.when(resource);
+        /**
+         * Create a collection filled by data
+         * @param {Array} [data]
+         * @returns {this}
+         */
+        BaseCollection.load = function load(data) {
+            return new this(data);
+        };
 
-            return promise.then(function(records) {
-                return new Self(records);
-            });
+        /**
+         * Create a collection filled by resource
+         * @param {Promise} resource
+         * @returns {Promise.<this>}
+         */
+        BaseCollection.loadResource = function loadResource(resource) {
+            var collection = this.load();
+            return collection.appendResource(resource);
         };
 
         BaseCollection.extend = extend;

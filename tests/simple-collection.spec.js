@@ -2,6 +2,7 @@ describe('Collection', function() {
 
     var UserModel;
     var $rootScope;
+    var $q;
 
     var data = [
         {id: 1, name: 'User1'},
@@ -13,8 +14,9 @@ describe('Collection', function() {
         module('mgmodel');
     });
 
-    beforeEach(inject(function(mgModel, _$rootScope_) {
+    beforeEach(inject(function(mgModel, _$rootScope_, _$q_) {
         $rootScope = _$rootScope_;
+        $q = _$q_;
         UserModel = mgModel.extend({
             id: null,
             name: null,
@@ -36,11 +38,24 @@ describe('Collection', function() {
 
     it('should be created', function() {
         var collection = new UserModel.$collection();
+
         expect(collection instanceof UserModel.$collection).toBeTruthy();
     });
 
     it('should load data', function() {
         var collection = createCollection();
+
+        expect(collection instanceof UserModel.$collection).toBeTruthy();
+        expect(collection.length).toBe(3);
+        expect(collection[0] instanceof UserModel).toBeTruthy();
+    });
+
+    it('should load data from resource', function() {
+        var collection;
+        UserModel.$collection.loadResource($q.when(data)).then(function(result) {
+            collection = result;
+        });
+        $rootScope.$digest();
 
         expect(collection instanceof UserModel.$collection).toBeTruthy();
         expect(collection.length).toBe(3);
@@ -59,11 +74,6 @@ describe('Collection', function() {
      * @returns {UserCollection}
      */
     function createCollection() {
-        var collection;
-        UserModel.$collection.load(data).then(function(result) {
-            collection = result;
-        });
-        $rootScope.$digest();
-        return collection;
+        return UserModel.$collection.load(data);
     }
 });

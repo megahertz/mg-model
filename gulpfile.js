@@ -75,9 +75,9 @@ gulp.task('bump', function() {
 gulp.task('publish', ['build', 'bump'], function() {
     var version = 'v' + require('./package.json').version;
     var comment = argv.m || 'Update version ' + version;
-    cmd('git tag ' + version);
     cmd('git add .');
     cmd('git commit -m', comment);
+    cmd('git tag ' + version);
     cmd('git push origin ' + version);
     //cmd('npm publish');
 });

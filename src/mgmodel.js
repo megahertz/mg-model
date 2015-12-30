@@ -6,6 +6,12 @@
         .factory('mgModel', mgModel);
 
     /**
+     * @ngdoc service
+     * @name mgModel
+     * @module mgModel
+     * @description
+     * Simple and lightweight angular model library
+     * @return BaseModel
      * @ngInject
      */
     function mgModel($q, $parse) {
@@ -14,6 +20,11 @@
         return Model;
     }
 
+    /**
+     * Simple OOP implementation
+     * @param {Object} members
+     * @return {Function}
+     */
     function extend(members) {
         /* jshint -W040 */
         var $collection = this.$collection;
@@ -43,24 +54,40 @@
     }
 
     function createBaseModel() {
+        /**
+         * @class BaseModel
+         * @param {Object} [data]
+         * @constructor
+         */
         function BaseModel(data) {
             angular.extend(this, data);
         }
 
-        BaseModel.prototype.getIdField = function () {
+        BaseModel.prototype.getIdField = function getIdField() {
             return 'id';
         };
 
-        BaseModel.prototype.getId = function () {
+        BaseModel.prototype.getId = function getId() {
             return this[this.getIdField()];
         };
 
+        /**
+         * @memberof BaseModel
+         * @method BaseModel.extend
+         * @static
+         * @return BaseModel
+         */
         BaseModel.extend = extend;
 
         return BaseModel;
     }
 
     function createBaseCollection(BaseModel, $q, $parse) {
+        /**
+         * @class BaseCollection
+         * @param {Array} data
+         * @constructor
+         */
         function BaseCollection(data) {
             if (!data) {
                 return;
@@ -70,7 +97,7 @@
             }
             var Model = this.constructor.$model || BaseModel;
 
-            this.push.apply(this, data.map(function (record) {
+            this.push.apply(this, data.map(function(record) {
                 return new Model(record);
             }));
         }
@@ -78,7 +105,7 @@
         BaseCollection.prototype = Object.create(Array.prototype);
         BaseCollection.prototype.filterExp = function filterExp(expression, scope) {
             var exp = $parse(expression);
-            var result = this.filter(function (model) {
+            var result = this.filter(function(model) {
                 if (!angular.isObject(scope)) {
                     scope = {value: scope};
                 }
@@ -87,7 +114,7 @@
             });
             return new this.constructor(result);
         };
-        BaseCollection.prototype.oneExp = function filterExp(expression, scope) {
+        BaseCollection.prototype.oneExp = function oneExp(expression, scope) {
             return this.filterExp(expression, scope)[0];
         };
 
@@ -95,7 +122,7 @@
             var Self = this;
             var promise = resource.then ? resource : $q.when(resource);
 
-            return promise.then(function (records) {
+            return promise.then(function(records) {
                 return new Self(records);
             });
         };

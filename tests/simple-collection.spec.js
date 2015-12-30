@@ -21,6 +21,7 @@ describe('Collection', function() {
             /**
              * @class UserCollection
              * @type UserCollection
+             * @extend BaseCollection
              */
             $collection: mgModel.$collection.extend({
                 getAllByName: function(name) {
@@ -54,6 +55,9 @@ describe('Collection', function() {
         expect(collection.getByName('User2').getId()).toBe(2);
     });
 
+    /**
+     * @returns {UserCollection}
+     */
     function createCollection() {
         var collection;
         UserModel.$collection.load(data).then(function(result) {

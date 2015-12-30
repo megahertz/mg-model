@@ -79,7 +79,7 @@ gulp.task('publish', ['build', 'bump'], function() {
     cmd('git add .');
     cmd('git commit -m', comment);
     cmd('git push origin ' + version);
-    cmd('bower register mg-model git://github.com/megahertz/mg-model.git');
+    cmd('npm publish');
 });
 
 function cmd(command, argument) {

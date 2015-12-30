@@ -75,6 +75,7 @@ gulp.task('bump', function(){
 gulp.task('publish', ['build', 'bump'], function() {
     var version = 'v' + require('./package.json').version;
     var comment = argv.m || 'Update version ' + version;
+    cmd('git tag ' + version);
     cmd('git add .');
     cmd('git commit -m', comment);
     cmd('git push origin ' + version);
@@ -85,6 +86,6 @@ function cmd(command, argument) {
     if (argument) {
         command += ' "' + argument.replace(/\"/g, '"\""')  + '"';
     }
-    var result = execSync(command);
+    var result = execSync(command).toString('utf8');
     console.log(result);
 }

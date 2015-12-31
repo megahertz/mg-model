@@ -93,5 +93,29 @@ describe('extend method', function() {
 
         expect(model.name).toBe('test');
         expect(changed).toBe('test');
-    })
+    });
+
+    it('should create class with properties support', function() {
+        var Model = mgModel.extend({
+            $properties: {
+                value: {
+                    get: function() {
+                        return this._value;
+                    },
+                    set: function(value) {
+                        value = Math.min(Math.max(value, 0), 100);
+                        this._value = value;
+                    }
+                }
+            }
+        });
+        var model = new Model({ value: 150 });
+        expect(model.value).toBe(100);
+
+        model.value = -1;
+        expect(model.value).toBe(0);
+
+        model.value = 5;
+        expect(model.value).toBe(5);
+    });
 });

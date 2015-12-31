@@ -47,11 +47,16 @@
     function extend(members) {
         /* jshint -W040 */
         var $collection = this.$collection;
+        var $properties = this.$properties;
         var self = this;
 
         if (members.$collection) {
             $collection = members.$collection;
             delete members.$collection;
+        }
+        if (members.$properties) {
+            $properties = members.$properties;
+            delete members.$properties;
         }
 
         function construct() {
@@ -59,7 +64,7 @@
         }
 
         var Class = members.constructor === Object ? construct : members.constructor;
-        Class.prototype = Object.create(this.prototype);
+        Class.prototype = Object.create(this.prototype, $properties);
         angular.extend(Class, this);
         angular.extend(Class.prototype, members);
         Class.prototype.constructor = Class;
@@ -177,7 +182,7 @@
         /**
          * Create a collection filled by data
          * @param {Array} [data]
-         * @returns {this}
+         * @return {*}
          */
         BaseCollection.load = function load(data) {
             return new this(data);
@@ -186,7 +191,7 @@
         /**
          * Create a collection filled by resource
          * @param {Promise} resource
-         * @returns {Promise.<this>}
+         * @return {Promise.<this>}
          */
         BaseCollection.loadResource = function loadResource(resource) {
             var collection = this.load();

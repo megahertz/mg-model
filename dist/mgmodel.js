@@ -141,10 +141,14 @@
             return this;
         };
 
+        BaseCollection.prototype.convertData = function convertData(data) {
+            return data;
+        };
+
         BaseCollection.prototype.appendResource = function appendResource(resource) {
             var self = this;
             return resource.then(function(records) {
-                self.append(records);
+                self.append(self.convertData(records));
                 return self;
             });
         };
@@ -200,7 +204,9 @@
          * @return {*}
          */
         BaseCollection.load = function load(data) {
-            return new this(data);
+            var record = new this();
+            record.append(record.convertData(data));
+            return record;
         };
 
         /**

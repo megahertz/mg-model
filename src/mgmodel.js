@@ -124,6 +124,7 @@
             if (!data) {
                 return this;
             }
+
             if (!(data instanceof Array)) {
                 throw 'Collection accepts only Array';
             }
@@ -150,14 +151,13 @@
 
         BaseCollection.prototype.filterExp = function filterExp(expression, scope) {
             var exp = $parse(expression);
-            var result = this.filter(function(model) {
+            return this.filter(function(model) {
                 if (!angular.isObject(scope)) {
                     scope = {value: scope};
                 }
                 scope.$model = model;
                 return exp(scope);
             });
-            return new this.constructor(result);
         };
 
         BaseCollection.prototype.oneExp = function oneExp(expression, scope) {
@@ -178,6 +178,21 @@
             });
             return obj;
         };
+
+        // Wrap Array methods to return BaseCollection instance instead
+        var arrayMethods = [
+            'reverse', 'sort', 'filter', 'map', 'copyWithin', 'fill', 'concat'
+        ];
+        arrayMethods.forEach(function(property) {
+            if (!Array.prototype[property]) {
+                return;
+            }
+
+            BaseCollection.prototype[property] = function() {
+                var result = Array.prototype[property].apply(this, arguments);
+                return new this.constructor(result);
+            };
+        });
 
         /**
          * Create a collection filled by data

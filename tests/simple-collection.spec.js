@@ -44,7 +44,6 @@ describe('Collection', function() {
 
     it('should load data', function() {
         var collection = createCollection();
-
         expect(collection instanceof UserModel.$collection).toBeTruthy();
         expect(collection.length).toBe(3);
         expect(collection[0] instanceof UserModel).toBeTruthy();
@@ -68,6 +67,14 @@ describe('Collection', function() {
         expect(results instanceof UserModel.$collection).toBeTruthy();
         expect(results[0].getId()).toBe(2);
         expect(collection.getByName('User2').getId()).toBe(2);
+    });
+
+    it('should wrap Array methods', function() {
+        var collection =  createCollection().filter(function(user) {
+           return 'User1' == user.name;
+        });
+
+        expect(collection instanceof UserModel.$collection).toBeTruthy();
     });
 
     /**

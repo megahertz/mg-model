@@ -19,19 +19,19 @@
         var Model = createBaseModel();
         Model.$collection = createBaseCollection(Model, $q, $parse);
 
-        Model.prototype.$on   = Model.$collection.prototype.$on   = $on;
-        Model.prototype.$emit = Model.$collection.prototype.$emit = $emit;
+        Model.prototype.on   = Model.$collection.prototype.on   = on;
+        Model.prototype.emit = Model.$collection.prototype.emit = emit;
 
         return Model;
 
-        function $on(event, handler) {
+        function on(event, handler) {
             /* jshint -W040 */
             this.scope = this.scope || $rootScope.$new();
             this.scope.$on(event, handler);
             return this;
         }
 
-        function $emit(event, data) {
+        function emit(event, data) {
             /* jshint -W040 */
             if (this.scope) {
                 this.scope.$emit(event, data);
@@ -109,18 +109,27 @@
     function createBaseCollection(BaseModel, $q, $parse) {
         /**
          * @class BaseCollection
-         * @param {Array} data
+         * @param {Array} [data]
+         * @param {Boolean} [prepare=false] If true then data will be passed
+         * through $collection.prepare() method
          * @constructor
          */
-        function BaseCollection(data) {
-            this.append(data);
+        function BaseCollection(data, prepare) {
+            this.append(data, prepare);
         }
 
         BaseCollection.prototype = Object.create(Array.prototype);
 
         BaseCollection.prototype.each = BaseCollection.prototype.forEach;
 
-        BaseCollection.prototype.append = function append(data) {
+        /**
+         * Append data to collection
+         * @param {Array} [data]
+         * @param {Boolean} [prepare=false] If true then data will be passed
+         * through $collection.prepare() method
+         * @returns {BaseCollection}
+         */
+        BaseCollection.prototype.append = function append(data, prepare) {
             if (!data) {
                 return this;
             }
@@ -130,6 +139,10 @@
             }
 
             var Model = this.constructor.$model || BaseModel;
+
+            if (prepare) {
+                data = this.prepare(data);
+            }
 
             this.push.apply(this, data.map(function(record) {
                 if (!(record instanceof Model)) {
@@ -141,14 +154,14 @@
             return this;
         };
 
-        BaseCollection.prototype.convertData = function convertData(data) {
+        BaseCollection.prototype.prepare = function convertData(data) {
             return data;
         };
 
         BaseCollection.prototype.appendResource = function appendResource(resource) {
             var self = this;
             return resource.then(function(records) {
-                self.append(self.convertData(records));
+                self.append(records, true);
                 return self;
             });
         };
@@ -204,9 +217,7 @@
          * @return {*}
          */
         BaseCollection.load = function load(data) {
-            var record = new this();
-            record.append(record.convertData(data));
-            return record;
+            return new this(data, true);
         };
 
         /**

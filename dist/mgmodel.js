@@ -154,7 +154,7 @@
             return this;
         };
 
-        BaseCollection.prototype.prepare = function convertData(data) {
+        BaseCollection.prototype.prepare = function prepare(data) {
             return data;
         };
 

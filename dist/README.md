@@ -116,6 +116,7 @@ extend(members) | Extend a current model. Returns a new model class
 
 #### Configs
 Configs are set when a model class is created by an extend() method
+
 Name        | Description
 ------------|------------
 $collection | A collection class for this model

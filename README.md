@@ -89,15 +89,15 @@ angular.module('app.models').factory('UserModel', function(ngModel) {
     });
 });
 
+
 # API Documentation
-mgModel service returns BaseModel instance
+mgModel service returns a BaseModel instance
 
 ## BaseModel
 
 #### Properties
 
-Properties are just a simple fields of a model, or properties defined through
-$properties 
+Properties are just a simple fields of a model or properties defined through $properties config
 
 #### Methods
 Name                | Description
@@ -105,8 +105,8 @@ Name                | Description
 constructor(data)   | Constructor which applies data to itself
 on(event, handler)  | Attach a handler on the event.
 emit(event, data)   | Emit the event
-getIdField():string | Return a name of id field (default id)
-getId():Object      | Return a value of id field
+getIdField():string | Return a name of an id field (default id)
+getId():Object      | Return a value of an id field
 
 #### Static
 Name            | Description
@@ -114,11 +114,19 @@ Name            | Description
 $collection     | A collection class for this model
 extend(members) | Extend a current model. Returns a new model class
 
+#### Configs
+Configs are set when a model class is created by an extend() method
+Name        | Description
+------------|------------
+$collection | A collection class for this model
+$properties | Define model properties using Object.defineProperty
+
+
 ## BaseCollection (extends Array)
 
 #### Properties
 
-There is only length property which is inherited from Array class
+There is only length property which is inherited from the Array class
 
 #### Methods
 Name                                        | Description
@@ -127,9 +135,9 @@ constructor(data, prepare=false)            | Constructor which calls append() m
 on(event, handler)                          | Attach a handler on the event.
 emit(event, data)                           | Emit the event
 each(iterator)                              | A shortcut for forEach() method
-append(array, prepare=false):this           | Appends records, wrap each record to $model class if necessary. If prepare=true pass the data through prepare() method
+append(array, prepare=false):this           | Appends records, wrap each record to a $model class if necessary. If prepare=true pass the data through prepare() method
 appendResource(resource):Promise            | Loads data from promise and call append(data, true) when finish
-filterExp(expression, scope):BaseCollection | Like filter() but evaluate expression instead of iterator. See the 'Simple Model' example
+filterExp(expression, scope):BaseCollection | Like filter() but evaluate an expression instead of iterator. See the 'Simple Model' example
 oneExp(expression, scope):BaseCollection    | Like filterExp() but returns only first item
 byId(id):BaseModel                          | Find record by calling getId() on each
 toObject():Object                           | Return Object keyed by id

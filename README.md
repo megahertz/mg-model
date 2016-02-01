@@ -97,7 +97,7 @@ mgModel service returns a BaseModel instance
 
 #### Properties
 
-Properties are just a simple fields of a model or properties defined through $properties config
+Properties are just simple fields of a model or real properties defined through $properties config
 
 #### Methods
 Name                | Description
